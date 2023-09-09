@@ -78,16 +78,31 @@
 
         /* Responsive design for smaller screens */
         @media (max-width: 768px) {
-            .on-screen-keyboard button {
-                width: 40px; /* Adjust the button width for smaller screens */
-                height: 48px; /* Adjust the button height for smaller screens */
-                font-size: 18px; /* Adjust the font size for smaller screens */
+            .keyboard {
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                background-color: #fff; /* Set the background color */
+                padding: 10px 0; /* Add padding for spacing */
+            }
+
+            .keyboard button {
+                width: 10%; /* Distribute buttons evenly across the width */
+                height: 60px; /* Adjust the button height as needed */
+                font-size: 18px; /* Adjust the font size as needed */
+                background-color: #fff;
+                color: #000; /* Set button text color to black */
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                text-align: center;
             }
 
             .letter-input {
                 width: 80px; /* Adjust the input field width for smaller screens */
                 height: 80px; /* Adjust the input field height for smaller screens */
                 font-size: 18px; /* Adjust the font size for smaller screens */
+                opacity: 1;
             }
         }
     </style>
