@@ -38,9 +38,9 @@
         }
 
         .keyboard button {
-            width: 75px; /* Adjust button size as needed */
-            height: 90px;
-            font-size: 27px;
+            width: 55px; /* Adjust button size as needed */
+            height: 75px;
+            font-size: 20px;
             margin: 3px; /* Adjust spacing between buttons */
             background-color: lightgray;
             border: 1px solid #ccc;
@@ -52,7 +52,7 @@
         }
 
         .long-btn {
-            width: 120px !important
+            width: 90px !important
         }
 
         #enter {
@@ -90,8 +90,8 @@
             }
 
             .keyboard button {
-                width: 5%; /* Distribute buttons evenly across the width */
-                height: 48px; /* Adjust the button height as needed */
+                width: 9%; /* Distribute buttons evenly across the width */
+                height: 96px; /* Adjust the button height as needed */
                 color: #000; /* Set button text color to black */
                 border: 1px solid #ccc;
                 border-radius: 5px;
@@ -99,7 +99,7 @@
             }
 
             .long-btn {
-                width: 7.5% !important;
+                width: 12.5% !important;
             }
 
             .letter-input {
@@ -113,6 +113,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
+            if ('addEventListener' in document) {
+                FastClick.attach(document.body);
+            }
+
             const letterButtons = document.querySelectorAll('.keyboard button');
             const inputFields = document.querySelectorAll('.letter-input'); // Assuming you have input fields with the "letter-input" class
             const secretFields = document.querySelectorAll('.secret-letter-input');
@@ -273,5 +278,7 @@
     </div>
 
     <div id="credits">Made by Kabir Azad</div>
+
+    <script src="C:\Users\Kabir\Downloads\fastclick-main\fastclick-main\lib\fastclick.js"></script>
 </body>
 </html>
