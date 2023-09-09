@@ -69,14 +69,33 @@
 
         /* Responsive design for smaller screens */
 
-        /*iPads*/
-        @media (min-width: 1200px) and (max-width: 1500px) {
+        /* iPads */
+        @media (min-width: 600px) and (max-width: 1250px) {
+            .keyboard {
+                background-color: #fff; 
+            }
+
+            .keyboard button {
+                color: #000; 
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                text-align: center;
+            }
+
+            .letter-input {
+                color: black;
+                opacity: 1;
+            }
+        }
+
+        /* iPhones */
+        @media (max-width: 500px) {
             .keyboard {
                 width: 100%;
                 position: fixed;
                 left: 0;
-                background-color: #fff; 
-                padding: 0 0; 
+                background-color: #fff;
+                padding: 0 0;
             }
 
             #row1 {
@@ -92,9 +111,9 @@
             }
 
             .keyboard button {
-                width: 9%; 
-                height: 36px; 
-                color: #000; 
+                width: 6%;
+                height: 36px;
+                color: #000;
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 text-align: center;
@@ -220,7 +239,7 @@
 
 <body>
     <header>
-        <h1 style="font-size:56px">Qrdle<br /><br /></h1>
+        <h1 style="font-size:56px">Qrdle<br /></h1>
     </header>
 
     <form id="input-boxes">
@@ -237,11 +256,11 @@
         <input type="hidden" class="secret-letter-input" maxlength="1" />
     </form>
 
-    <br /><br /><br /><br />
+    <br /><br /><br />
     
     <span id="attempts">Attempts: 0</span>
     
-    <br /><br /><br /><br />
+    <br /><br /><br />
 
     <div class="keyboard" id="row1">
         <button>Q</button>
