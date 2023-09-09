@@ -2,7 +2,7 @@
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" name="viewport" content="width=device-width, user-scalable=no">
     <title></title>
 
     <style>
@@ -34,22 +34,21 @@
         .keyboard {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center 
+            justify-content: center
         }
 
-        .keyboard button {
-            width: 55px; /* Adjust button size as needed */
-            height: 75px;
-            font-size: 20px;
-            margin: 3px; /* Adjust spacing between buttons */
-            background-color: lightgray;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-               
-        }
+            .keyboard button {
+                width: 55px; /* Adjust button size as needed */
+                height: 75px;
+                font-size: 20px;
+                margin: 3px; /* Adjust spacing between buttons */
+                background-color: lightgray;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 24px;
+                font-weight: bold;
+            }
 
         .long-btn {
             width: 90px !important
@@ -68,7 +67,7 @@
         }
 
         /* Responsive design for smaller screens */
-        @media (max-width: 1284px) {
+        @media (max-width: 1400px) {
             .keyboard {
                 width: 100%;
                 position: fixed;
@@ -80,11 +79,11 @@
             #row1 {
                 bottom: 27.5%;
             }
-            
+
             #row2 {
                 bottom: 20%;
             }
-            
+
             #row3 {
                 bottom: 12.5%;
             }
@@ -169,9 +168,9 @@
                     ) {
                         kabir = true;
                     }
-                    
 
-                    
+
+
 
                     if (num <= 25 || kabir == true) {
                         correct(attemptNum);
@@ -197,9 +196,9 @@
 
             if (attempts > 1)
                 document.getElementById('attempts').textContent = 'Congratulations! You beat the Qrdle in ' + attempts + ' attempts!';
-            else 
+            else
                 document.getElementById('attempts').textContent = 'Congratulations! You beat the Qrdle in ' + attempts + ' attempt!';
-            
+
         }
 
         function incorrect(attempts) {
