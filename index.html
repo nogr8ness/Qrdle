@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <style>
+        body {
+            text-align: center;
+        }
+
+        .letter-input {
+            width: 100px; /* Adjust the width as needed */
+            height: 100px; /* Adjust the height as needed */
+            font-size: 64px;
+            border: 2px solid black;
+            border-radius: 5px;
+            margin-right: 10px; /* Add spacing between boxes */
+            text-align: center;
+            font-weight: bolder
+        }
+
+        .correct {
+            width: 100px; /* Adjust the width as needed */
+            height: 100px; /* Adjust the height as needed */
+            font-size: 64px;
+            border: 2px solid black;
+            border-radius: 5px;
+            margin-right: 10px; /* Add spacing between boxes */
+            text-align: center;
+            font-weight: bolder;
+
+            background-color: seagreen;
+            color: white;
+        }
+
+        #attempts {
+            text-align: center;
+            font-size: 42px;
+        }
+
+        .keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center 
+        }
+
+        .keyboard button {
+            width: 50px; /* Adjust button size as needed */
+            height: 60px;
+            font-size: 18px;
+            margin: 3px; /* Adjust spacing between buttons */
+            background-color: lightgray;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+               
+        }
+
+        .long-btn {
+            width: 80px !important
+        }
+
+        #enter {
+            font-size: 16px;
+        }
+
+        #credits {
+            position: fixed; /* Position the text element */
+            top: 15px; /* Adjust the top position as needed */
+            right: 15px; /* Adjust the right position as needed */
+            padding: 5px 10px; /* Optional padding for the text element */
+            font-size: 24px; /* Adjust the font size as needed */
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .on-screen-keyboard button {
+                width: 40px; /* Adjust the button width for smaller screens */
+                height: 48px; /* Adjust the button height for smaller screens */
+                font-size: 18px; /* Adjust the font size for smaller screens */
+            }
+
+            .letter-input {
+                width: 80px; /* Adjust the input field width for smaller screens */
+                height: 80px; /* Adjust the input field height for smaller screens */
+                font-size: 18px; /* Adjust the font size for smaller screens */
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const letterButtons = document.querySelectorAll('.keyboard button');
+            const inputFields = document.querySelectorAll('.letter-input'); // Assuming you have input fields with the "letter-input" class
+            const secretFields = document.querySelectorAll('.secret-letter-input');
+
+            let currentIndex = 0; // Keep track of the current input field
+
+            letterButtons.forEach(function (button) {
+                if (button.id != 'enter' && button.id != 'backspace') {
+
+                    button.addEventListener('click', function () {
+                        if (currentIndex < inputFields.length) {
+                            // Check if there are available input fields
+                            inputFields[currentIndex].value = 'Q';
+                            secretFields[currentIndex].value = button.textContent;
+                            currentIndex++; // Move to the next input field
+                        }
+                    });
+
+                }
+            });
+
+            var backspace = document.getElementById('backspace');
+            backspace.addEventListener('click', function () {
+                if (currentIndex > 0) {
+                    // Delete the content of the current input field
+                    inputFields[currentIndex - 1].value = '';
+                    secretFields[currentIndex - 1].value = '';
+                    currentIndex--; // Move back to the previous input field
+                }
+            });
+
+            let attemptNum = 0;
+
+            var enter = document.getElementById('enter');
+            enter.addEventListener('click', function () {
+                //Ensure all boxes filled in
+                if (currentIndex == 5) {
+                    let num = Math.random() * 100;
+                    attemptNum++;
+
+                    let kabir = false;
+
+                    if (
+                        secretFields[0].value === 'K' &&
+                        secretFields[1].value === 'A' &&
+                        secretFields[2].value === 'B' &&
+                        secretFields[3].value === 'I' &&
+                        secretFields[4].value === 'R'
+                    ) {
+                        kabir = true;
+                    }
+                    
+
+                    
+
+                    if (num <= 25 || kabir == true) {
+                        correct(attemptNum);
+                    }
+
+                    else {
+                        currentIndex = 0;
+                        incorrect(attemptNum);
+                    }
+                }
+            })
+        });
+
+        function correct(attempts) {
+            const inputFields = document.querySelectorAll('.letter-input');
+
+            inputFields.forEach(function (field) {
+                field.className = 'correct';
+            });
+
+            document.getElementById('backspace').disabled = true;
+            document.getElementById('enter').disabled = true;
+
+            if (attempts > 1)
+                document.getElementById('attempts').textContent = 'Congratulations! You beat the Qrdle in ' + attempts + ' attempts!';
+            else 
+                document.getElementById('attempts').textContent = 'Congratulations! You beat the Qrdle in ' + attempts + ' attempt!';
+            
+        }
+
+        function incorrect(attempts) {
+            const inputFields = document.querySelectorAll('.letter-input');
+
+            inputFields.forEach(function (field) {
+                field.value = '';
+            });
+
+            document.getElementById('attempts').textContent = 'Attempts: ' + attempts;
+        }
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1 style="font-size:56px">Qrdle<br /><br /></h1>
+    </header>
+
+    <form id="input-boxes">
+        <input type="text" class="letter-input" maxlength="1" disabled="disabled">
+        <input type="text" class="letter-input" maxlength="1" disabled="disabled">
+        <input type="text" class="letter-input" maxlength="1" disabled="disabled">
+        <input type="text" class="letter-input" maxlength="1" disabled="disabled">
+        <input type="text" class="letter-input" maxlength="1" disabled="disabled">
+
+        <input type="hidden" class="secret-letter-input" maxlength="1" />
+        <input type="hidden" class="secret-letter-input" maxlength="1" />
+        <input type="hidden" class="secret-letter-input" maxlength="1" />
+        <input type="hidden" class="secret-letter-input" maxlength="1" />
+        <input type="hidden" class="secret-letter-input" maxlength="1" />
+    </form>
+
+    <br /><br /><br /><br />
+    
+    <span id="attempts">Attempts: 0</span>
+    
+    <br /><br /><br /><br />
+
+    <div class="keyboard">
+        <button>Q</button>
+        <button>W</button>
+        <button>E</button>
+        <button>R</button>
+        <button>T</button>
+        <button>Y</button>
+        <button>U</button>
+        <button>I</button>
+        <button>O</button>
+        <button>P</button>
+    </div>
+
+    <div class="keyboard">
+        <button>A</button>
+        <button>S</button>
+        <button>D</button>
+        <button>F</button>
+        <button>G</button>
+        <button>H</button>
+        <button>J</button>
+        <button>K</button>
+        <button>L</button>
+    </div>
+
+    <div class="keyboard">
+        <button class="long-btn" id="enter">ENTER</button>
+        <button>Z</button>
+        <button>X</button>
+        <button>C</button>
+        <button>V</button>
+        <button>B</button>
+        <button>N</button>
+        <button>M</button>
+        <button class="long-btn" id="backspace">&#9003</button>
+    </div>
+
+    <div id="credits">Made by Kabir Azad</div>
+</body>
+</html>
