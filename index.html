@@ -22,15 +22,6 @@
         }
 
         .correct {
-            width: 100px; /* Adjust the width as needed */
-            height: 100px; /* Adjust the height as needed */
-            font-size: 64px;
-            border: 2px solid black;
-            border-radius: 5px;
-            margin-right: 10px; /* Add spacing between boxes */
-            text-align: center;
-            font-weight: bolder;
-
             background-color: seagreen;
             color: white;
         }
@@ -47,9 +38,9 @@
         }
 
         .keyboard button {
-            width: 50px; /* Adjust button size as needed */
-            height: 60px;
-            font-size: 18px;
+            width: 75px; /* Adjust button size as needed */
+            height: 90px;
+            font-size: 27px;
             margin: 3px; /* Adjust spacing between buttons */
             background-color: lightgray;
             border: 1px solid #ccc;
@@ -61,7 +52,7 @@
         }
 
         .long-btn {
-            width: 80px !important
+            width: 120px !important
         }
 
         #enter {
@@ -77,31 +68,44 @@
         }
 
         /* Responsive design for smaller screens */
-        @media (max-width: 768px) {
+        @media (max-width: 1284px) {
             .keyboard {
                 width: 100%;
                 position: fixed;
-                bottom: 0;
                 left: 0;
                 background-color: #fff; /* Set the background color */
-                padding: 10px 0; /* Add padding for spacing */
+                padding: 0 0; /* Add padding for spacing */
+            }
+
+            #row1 {
+                bottom: 27.5%;
+            }
+            
+            #row2 {
+                bottom: 20%;
+            }
+            
+            #row3 {
+                bottom: 12.5%;
             }
 
             .keyboard button {
-                width: 10%; /* Distribute buttons evenly across the width */
-                height: 60px; /* Adjust the button height as needed */
-                font-size: 18px; /* Adjust the font size as needed */
-                background-color: #fff;
+                width: 5%; /* Distribute buttons evenly across the width */
+                height: 48px; /* Adjust the button height as needed */
                 color: #000; /* Set button text color to black */
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 text-align: center;
             }
 
+            .long-btn {
+                width: 7.5% !important;
+            }
+
             .letter-input {
                 width: 80px; /* Adjust the input field width for smaller screens */
                 height: 80px; /* Adjust the input field height for smaller screens */
-                font-size: 18px; /* Adjust the font size for smaller screens */
+                font-size: 64px; /* Adjust the font size for smaller screens */
                 opacity: 1;
             }
         }
@@ -180,7 +184,7 @@
             const inputFields = document.querySelectorAll('.letter-input');
 
             inputFields.forEach(function (field) {
-                field.className = 'correct';
+                field.className += ' correct';
             });
 
             document.getElementById('backspace').disabled = true;
@@ -231,7 +235,7 @@
     
     <br /><br /><br /><br />
 
-    <div class="keyboard">
+    <div class="keyboard" id="row1">
         <button>Q</button>
         <button>W</button>
         <button>E</button>
@@ -244,7 +248,7 @@
         <button>P</button>
     </div>
 
-    <div class="keyboard">
+    <div class="keyboard" id="row2">
         <button>A</button>
         <button>S</button>
         <button>D</button>
@@ -256,7 +260,7 @@
         <button>L</button>
     </div>
 
-    <div class="keyboard">
+    <div class="keyboard" id="row3">
         <button class="long-btn" id="enter">ENTER</button>
         <button>Z</button>
         <button>X</button>
