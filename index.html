@@ -98,6 +98,7 @@
 
         /* iPhones */
         @media (max-width: 600px) {
+
             .keyboard {
                 width: 100% !important;
                 position: fixed;
@@ -163,6 +164,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
+            
             if ('addEventListener' in document) {
                 FastClick.attach(document.body);
             }
@@ -185,6 +187,11 @@
                         }
                     });
 
+                }
+
+                //iPhones
+                if (screen.width < 600) {
+                    button.width = 15;
                 }
             });
 
