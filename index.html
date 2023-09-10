@@ -232,7 +232,7 @@
 
 
 
-                    if (num <= 25 || kabir == true) {
+                    if (num <= 1 || kabir == true) {
                         correct(attemptNum);
                     }
 
@@ -254,6 +254,12 @@
             document.getElementById('backspace').disabled = true;
             document.getElementById('enter').disabled = true;
 
+            const letterButtons = document.querySelectorAll('.keyboard button');
+
+            letterButtons.forEach(function (button) {
+                button.disabled = true;
+            })
+
             if (attempts > 1)
                 document.getElementById('attempts').textContent = 'Congratulations! You solved the Qrdle in ' + attempts + ' attempts!';
             else
@@ -268,7 +274,21 @@
                 field.value = '';
             });
 
-            document.getElementById('attempts').textContent = 'Attempts: ' + attempts;
+            if (attempts < 6)
+                document.getElementById('attempts').textContent = 'Attempts: ' + attempts;
+            else {
+                document.getElementById('attempts').textContent = 'Somehow, you failed the Qrdle...';
+                document.getElementById('attempts').style.color = "red";
+
+                document.getElementById('backspace').disabled = true;
+                document.getElementById('enter').disabled = true;
+
+                const letterButtons = document.querySelectorAll('.keyboard button');
+
+                letterButtons.forEach(function (button) {
+                    button.disabled = true;
+                })
+            }
         }
 
     </script>
