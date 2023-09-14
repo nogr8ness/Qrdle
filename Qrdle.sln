@@ -3,6 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F35FB1B-2C6A-458D-8D22-979080329186}"
+	ProjectSection(SolutionItems) = preProject
+		index.html = index.html
+		guess_list.txt = guess_list.txt
+		answers_list.txt = answers_list.txt
+		skill.html = skill.html
+		noskill.html = noskill.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
