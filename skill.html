@@ -241,7 +241,10 @@
                 font-size: 13px;
                 margin: 1px;
                 text-align: center;
-                flex: 1
+                flex: 1;
+
+                user-select: none; /* Prevent text selection when clicking */
+                -webkit-user-select: none; /* For older versions of Safari */
             }
 
             #enter {
@@ -325,9 +328,13 @@
             secretFields = document.querySelectorAll('.secret-letter-input');
 
             letterButtons.forEach(function (button) {
+
+                button.tabIndex = -1;
+
                 if (button.id != 'enter' && button.id != 'backspace') {
 
                     button.addEventListener('click', function () {
+                        button.blur();
                         if (currentIndex < inputFields.length) {
                             // Check if there are available input fields
                             inputFields[currentIndex].value = 'Q';
@@ -335,7 +342,6 @@
                             currentIndex++; // Move to the next input field
                         }
                     });
-
                 }
 
                 //iPhones
@@ -348,6 +354,7 @@
 
             var backspace = document.getElementById('backspace');
             backspace.addEventListener('click', function () {
+                backspace.blur();   
                 deleteLetter();
             });
             
@@ -355,6 +362,7 @@
 
             var enter = document.getElementById('enter');
             enter.addEventListener('click', function () {
+                enter.blur();
                 checkWord();
             });
         });
@@ -586,8 +594,8 @@
         <br /><h1 style="font-size:56px">Qrdle<br /></h1>
     </header>
 
-    <button id="rules" onclick="displayRules()">Rules</button>
-    <button id="no-skill" onclick="window.location.href='noskill.html';">Play No <br class="activate-phone" /> Skill</button>
+    <button id="rules" tabindex="-1" onclick="displayRules()">Rules</button>
+    <button id="no-skill" tabindex="-1" onclick="window.location.href='noskill.html';">Play No <br class="activate-phone" /> Skill</button>
 
     <div id="rules-bg">
         <h2 style="font-size: 48px;">Rules</h2>
