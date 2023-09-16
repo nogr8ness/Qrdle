@@ -266,18 +266,27 @@
     </style>
 
     <script>
+
+        let inputFields;
+        let secretFields;
+
+        let currentIndex = 0; // Keep track of the current input field
+        let attemptNum = 0;
+
         document.addEventListener('DOMContentLoaded', function () {
 
+            //Keyboard Functionality
+            document.addEventListener('keydown', keyPressHandler);
             
             if ('addEventListener' in document) {
                 FastClick.attach(document.body);
             }
 
             const letterButtons = document.querySelectorAll('.keyboard button');
-            const inputFields = document.querySelectorAll('.letter-input'); // Assuming you have input fields with the "letter-input" class
-            const secretFields = document.querySelectorAll('.secret-letter-input');
+            inputFields = document.querySelectorAll('.letter-input'); // Assuming you have input fields with the "letter-input" class
+            secretFields = document.querySelectorAll('.secret-letter-input');
 
-            let currentIndex = 0; // Keep track of the current input field
+            
 
             letterButtons.forEach(function (button) {
                 if (button.id != 'enter' && button.id != 'backspace') {
@@ -301,49 +310,97 @@
 
             var backspace = document.getElementById('backspace');
             backspace.addEventListener('click', function () {
-                if (currentIndex > 0) {
-                    // Delete the content of the current input field
-                    inputFields[currentIndex - 1].value = '';
-                    secretFields[currentIndex - 1].value = '';
-                    currentIndex--; // Move back to the previous input field
-                }
+                deleteLetter();
             });
 
-            let attemptNum = 0;
+            
 
             var enter = document.getElementById('enter');
             enter.addEventListener('click', function () {
-                //Ensure all boxes filled in
-                if (currentIndex == 5) {
-                    let num = Math.random() * 100;
-                    attemptNum++;
-
-                    let kabir = false;
-
-                    if (
-                        secretFields[0].value === 'K' &&
-                        secretFields[1].value === 'A' &&
-                        secretFields[2].value === 'B' &&
-                        secretFields[3].value === 'I' &&
-                        secretFields[4].value === 'R'
-                    ) {
-                        kabir = true;
-                    }
-
-
-
-
-                    if (num <= 25 || kabir == true) {
-                        correct(attemptNum);
-                    }
-
-                    else {
-                        currentIndex = 0;
-                        incorrect(attemptNum);
-                    }
-                }
+                checkWord();
             })
         });
+
+        function keyPressHandler(event) {
+            keyPress(event.key.toUpperCase());
+        }
+
+        function keyPress(key) {
+
+            //Check if keypress is a letter/enter/backspace
+            const regex = /^[A-Z]$/;
+
+            if (!regex.test(key) && key != 'ENTER' && key != 'BACKSPACE')
+                return;
+
+            if (key == 'ENTER') {
+                checkWord();
+                return;
+            }
+
+            if (key == 'BACKSPACE') {
+                deleteLetter();
+                return;
+            }
+
+            //Fill in letters
+            if (currentIndex < inputFields.length) {
+                inputFields[currentIndex].value = 'Q';
+                secretFields[currentIndex].value = key;
+                currentIndex++; // Move to the next input field
+            }
+        }
+
+        function deleteLetter() {
+
+            if (currentIndex > 0) {
+
+                // Delete the content of the current input field
+                inputFields[currentIndex - 1].value = '';
+                secretFields[currentIndex - 1].value = '';
+                currentIndex--; // Move back to the previous input field
+            }
+        }
+
+        function clearLetters() {
+            const inputFields = document.querySelectorAll('.letter-input');
+
+            inputFields.forEach(function (field) {
+                field.value = '';
+            });
+        }
+
+        function checkWord() {
+            //Ensure all boxes filled in
+            if (currentIndex == 5) {
+                let num = Math.random() * 100;
+                attemptNum++;
+
+                let kabir = false;
+
+                if (
+                    secretFields[0].value === 'K' &&
+                    secretFields[1].value === 'A' &&
+                    secretFields[2].value === 'B' &&
+                    secretFields[3].value === 'I' &&
+                    secretFields[4].value === 'R'
+                ) {
+                    kabir = true;
+                }
+
+
+
+
+                if (num <= 25 || kabir == true) {
+                    correct(attemptNum);
+                }
+
+                else {
+                    currentIndex = 0;
+                    incorrect(attemptNum);
+                }
+            }
+        }
 
         function correct(attempts) {
             const inputFields = document.querySelectorAll('.letter-input');
@@ -360,6 +417,8 @@
             letterButtons.forEach(function (button) {
                 button.disabled = true;
             })
+
+            document.removeEventListener('keydown', keyPressHandler);
 
             if (attempts > 1)
                 document.getElementById('attempts').textContent = 'Congratulations! You solved the Qrdle in ' + attempts + ' attempts!';
@@ -389,6 +448,8 @@
                 letterButtons.forEach(function (button) {
                     button.disabled = true;
                 })
+
+                document.removeEventListener('keydown', keyPressHandler);
             }
         }
 

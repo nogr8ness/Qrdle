@@ -268,18 +268,27 @@
     <script>
         let wordLetters;
 
+        //Generate random word
+        const answerListURL = 'answers_list.txt';
+        let answerList;
+        let randomWord = "";
+        const guessListURL = 'guess_list.txt';
+        let guessList; 
+
+        let inputFields;
+        let secretFields;
+
+        let currentIndex = 0; // Keep track of the current input field
+        let attemptNum = 0;
+
         document.addEventListener('DOMContentLoaded', function () {
 
+            //Keyboard Functionality
+            document.addEventListener('keydown', keyPressHandler);
 
             if ('addEventListener' in document) {
                 FastClick.attach(document.body);
             }
-
-
-            //Generate random word
-            const answerListURL = 'answers_list.txt';
-            let answerList;
-            let randomWord = "";
 
             fetch(answerListURL)
                 .then(response => response.text())
@@ -298,9 +307,6 @@
                     console.error('Error fetching word list:', error);
                 });
 
-            const guessListURL = 'guess_list.txt';
-            let guessList; 
-
             fetch(guessListURL)
                 .then(response => response.text())
                 .then(data => {
@@ -311,12 +317,12 @@
                     console.error('Error fetching word list:', error);
                 });
 
+
+
             //Click event for keyboard buttons
             const letterButtons = document.querySelectorAll('.keyboard button');
-            const inputFields = document.querySelectorAll('.letter-input'); // Assuming you have input fields with the "letter-input" class
-            const secretFields = document.querySelectorAll('.secret-letter-input');
-
-            let currentIndex = 0; // Keep track of the current input field
+            inputFields = document.querySelectorAll('.letter-input'); // Assuming you have input fields with the "letter-input" class
+            secretFields = document.querySelectorAll('.secret-letter-input');
 
             letterButtons.forEach(function (button) {
                 if (button.id != 'enter' && button.id != 'backspace') {
@@ -338,128 +344,64 @@
                 }
             });
 
+
+
             var backspace = document.getElementById('backspace');
             backspace.addEventListener('click', function () {
-                if (currentIndex > 0) {
-                    console.log(wordLetters);
-                    // Delete the content of the current input field
-                    inputFields[currentIndex - 1].value = '';
-                    secretFields[currentIndex - 1].value = '';
-                    currentIndex--; // Move back to the previous input field
-                }
+                deleteLetter();
             });
+            
 
-            let attemptNum = 0;
 
             var enter = document.getElementById('enter');
-            let color = "gray";
-
             enter.addEventListener('click', function () {
-                //Ensure all boxes filled in
-                if (currentIndex == 5) {
-                    console.log(guessList);
-
-
-                    //Ensure that the word is valid
-                    let guessedWord = "";
-                    for (let i = 0; i < 5; i++) {
-                        guessedWord += secretFields[i].value;
-                    }
-
-                    let isValidWord = false;
-                    for (let i = 0; i < guessList.length; i++) {
-                        if (guessedWord == guessList[i].trim().toUpperCase()) {
-                            isValidWord = true;
-                            break;
-                        }
-                            
-                    }
-
-
-                    //Fade Mechanic
-                    if (isValidWord == false) {
-
-
-                        //Invalid Word display and fade out
-                        const txt = document.getElementById('invalid-word');
-                        txt.style.opacity = 1;
-
-                        txt.animate(
-                            [{ opacity: 1 }, { opacity: 0 }],
-                            { duration: 1000 }
-                        );
-
-                        txt.style.opacity = 0;
-
-                        currentIndex = 0;
-                        clearLetters();
-
-                        return;
-
-
-                    }
-                        
-
-                    //Change colors of letters in keyboard
-                    let isCorrect = true;
-
-                    for (let i = 0; i < 5; i++) {
-
-                        if (secretFields[i].value == wordLetters[i]) {
-                            
-                            color = "green";
-                        }
-
-                        //yellow
-                        if (color == "gray") {
-                            for (let j = 0; j < 5; j++) {
-                                if (secretFields[i].value == wordLetters[j]) {
-                                    color = "yellow";
-                                    break;
-                                }
-                                    
-                            }
-                        }
-
-                        //If not green or yellow, becomes gray
-
-                        //Find button and change its color
-                        for (const btn of document.querySelectorAll("button")) {
-                            if (btn.textContent.includes(secretFields[i].value) && btn.textContent != "ENTER" &&
-                                btn.id != "no-skill" && btn.id != "rules") {
-
-                                //If button is green OR if button is yellow and color is gray/yellow, don't execute the code
-                                if (btn.style.backgroundColor != "green" && !(color == "gray" && btn.style.backgroundColor == "yellow"))
-                                    btn.style.backgroundColor = color;
-                            }
-                        }
-
-                        if (color != "green")
-                            isCorrect = false;
-
-                        color = "gray";
-                    }
-
-                    attemptNum++;
-
-                    if (isCorrect == true)
-                        correct(attemptNum);
-                    else {
-                        currentIndex = 0;
-                        incorrect(attemptNum);
-                    }
-                        
-
-
-
-                    //**********MAKE ONLY VALID WORDS WORK
-                }
-            })
+                checkWord();
+            });
         });
+
+        function keyPressHandler(event) {
+            keyPress(event.key.toUpperCase());
+        }
+
+        function keyPress(key) {
+
+            //Check if keypress is a letter/enter/backspace
+            const regex = /^[A-Z]$/;
+
+            if (!regex.test(key) && key != 'ENTER' && key != 'BACKSPACE')
+                return;
+
+            if (key == 'ENTER') {
+                checkWord();
+                return;
+            }
+
+            if (key == 'BACKSPACE') {
+                deleteLetter();
+                return;
+            }
+
+            //Fill in letters
+            if (currentIndex < inputFields.length) {
+                inputFields[currentIndex].value = 'Q';
+                secretFields[currentIndex].value = key;
+                currentIndex++; // Move to the next input field
+            }
+        }
 
         function processWordLetters(word) {
             wordLetters = word.split("");
-            console.log(wordLetters);
+        }
+
+        function deleteLetter() {
+
+            if (currentIndex > 0) {
+
+                // Delete the content of the current input field
+                inputFields[currentIndex - 1].value = '';
+                secretFields[currentIndex - 1].value = '';
+                currentIndex--; // Move back to the previous input field
+            }
         }
 
         function clearLetters() {
@@ -468,6 +410,106 @@
             inputFields.forEach(function (field) {
                 field.value = '';
             });
+        }
+
+        function checkWord() {
+
+            let color = "gray";
+
+            //Ensure all boxes filled in
+            if (currentIndex == 5) {
+
+
+                //Ensure that the word is valid
+                let guessedWord = "";
+                for (let i = 0; i < 5; i++) {
+                    guessedWord += secretFields[i].value;
+                }
+
+                let isValidWord = false;
+                for (let i = 0; i < guessList.length; i++) {
+                    if (guessedWord == guessList[i].trim().toUpperCase()) {
+                        isValidWord = true;
+                        break;
+                    }
+
+                }
+
+
+                //Fade Mechanic
+                if (isValidWord == false) {
+
+
+                    //Invalid Word display and fade out
+                    const txt = document.getElementById('invalid-word');
+                    txt.style.opacity = 1;
+
+                    txt.animate(
+                        [{ opacity: 1 }, { opacity: 0 }],
+                        { duration: 1000 }
+                    );
+
+                    txt.style.opacity = 0;
+
+                    currentIndex = 0;
+                    clearLetters();
+
+                    return;
+
+
+                }
+
+
+                //Change colors of letters in keyboard
+                let isCorrect = true;
+
+                for (let i = 0; i < 5; i++) {
+
+                    if (secretFields[i].value == wordLetters[i]) {
+
+                        color = "green";
+                    }
+
+                    //yellow
+                    if (color == "gray") {
+                        for (let j = 0; j < 5; j++) {
+                            if (secretFields[i].value == wordLetters[j]) {
+                                color = "yellow";
+                                break;
+                            }
+
+                        }
+                    }
+
+                    //If not green or yellow, becomes gray
+
+                    //Find button and change its color
+                    for (const btn of document.querySelectorAll("button")) {
+                        if (btn.textContent.includes(secretFields[i].value) && btn.textContent != "ENTER" &&
+                            btn.id != "no-skill" && btn.id != "rules") {
+
+                            //If button is green OR if button is yellow and color is gray/yellow, don't execute the code
+                            if (btn.style.backgroundColor != "green" && !(color == "gray" && btn.style.backgroundColor == "yellow"))
+                                btn.style.backgroundColor = color;
+                        }
+                    }
+
+                    if (color != "green")
+                        isCorrect = false;
+
+                    color = "gray";
+                }
+
+                attemptNum++;
+
+                if (isCorrect == true)
+                    correct(attemptNum);
+                else {
+                    currentIndex = 0;
+                    incorrect(attemptNum);
+                }
+
+            }
         }
 
         function correct(attempts) {
@@ -486,6 +528,8 @@
             letterButtons.forEach(function (button) {
                 button.disabled = true;
             })
+
+            document.removeEventListener('keydown', keyPressHandler);
 
             if (attempts > 1)
                 document.getElementById('attempts').textContent = 'Congratulations! You solved the Qrdle in ' + attempts + ' attempts!';
@@ -519,6 +563,8 @@
                 letterButtons.forEach(function (button) {
                     button.disabled = true;
                 })
+
+                document.removeEventListener('keydown', keyPressHandler);
             }
         }
 
